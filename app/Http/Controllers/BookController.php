@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Models\Author;
 
 class BookController extends Controller
 {
@@ -46,6 +48,7 @@ class BookController extends Controller
      */
     public function edit(string $id)
     {
+        $book = Book::findOrFail($id);
         $authors = Author::all();
         return view('books.edit', compact('book', 'authors'));
     }
@@ -55,8 +58,9 @@ class BookController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $book = Book::findOrFail($id);
         $book->update($request->all());
-    return redirect()->route('books.index');
+        return redirect()->route('books.index');
     }
 
     /**
@@ -64,6 +68,7 @@ class BookController extends Controller
      */
     public function destroy(string $id)
     {
+        $book = Book::findOrFail($id);
         $book->delete();
         return redirect()->route('books.index');
     }
