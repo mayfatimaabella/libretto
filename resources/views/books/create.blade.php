@@ -18,6 +18,15 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <label>Genres:</label>
+            <select name="genres[]" class="form-control" multiple>
+                @foreach($genres as $genre)
+                    <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                @endforeach
+            </select>
+            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple genres</small>
+        </div>
         <button class="btn btn-success">Save</button>
     </form>
 </div>

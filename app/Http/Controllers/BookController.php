@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\Genre;
 
 class BookController extends Controller
 {
@@ -13,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with('author')->get();
+        $books = Book::with(['author', 'genres'])->get();
         return view('books.index', compact('books'));
     }
 
@@ -23,7 +24,8 @@ class BookController extends Controller
     public function create()
     {
         $authors = Author::all();
-        return view('books.create', compact('authors'));
+        $genres = Genre::all();
+        return view('books.create', compact('authors', 'genres'));
     }
 
     /**
@@ -31,7 +33,12 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        Book::create($request->all());
+        $book = Book::create($request->only(['title', 'author_id']));
+        
+        if ($request->has('genres')) {
+            $book->genres()->attach($request->genres);
+        }
+        
         return redirect()->route('books.index');
     }
 
@@ -40,7 +47,8 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $book = Book::with(['author', 'genres', 'reviews'])->findOrFail($id);
+        return view('books.show', compact('book'));
     }
 
     /**
@@ -50,7 +58,8 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         $authors = Author::all();
-        return view('books.edit', compact('book', 'authors'));
+        $genres = Genre::all();
+        return view('books.edit', compact('book', 'authors', 'genres'));
     }
 
     /**
@@ -59,7 +68,14 @@ class BookController extends Controller
     public function update(Request $request, string $id)
     {
         $book = Book::findOrFail($id);
-        $book->update($request->all());
+        $book->update($request->only(['title', 'author_id']));
+        
+        if ($request->has('genres')) {
+            $book->genres()->sync($request->genres);
+        } else {
+            $book->genres()->detach();
+        }
+        
         return redirect()->route('books.index');
     }
 
