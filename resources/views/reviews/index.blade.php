@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2></i>Reviews</h2>
-        <a href="{{ route('reviews.create') }}" class="btn btn-danger">
+        <h2><i class="fas fa-star text-info me-2"></i>Reviews</h2>
+        <a href="{{ route('reviews.create') }}" class="btn btn-info">
             <i class="fas fa-plus me-2"></i>Add New Review
         </a>
     </div>
@@ -16,59 +16,72 @@
         </div>
     @endif
 
-    <div class="row">
-        @forelse($reviews as $review)
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h6 class="card-title mb-0">{{ $review->book->title }}</h6>
-                        <div class="text-warning">
-                            @for($i = 1; $i <= 5; $i++)
-                                @if($i <= $review->rating)
-                                    <i class="fas fa-star"></i>
-                                @else
-                                    <i class="far fa-star"></i>
-                                @endif
-                            @endfor
-                        </div>
-                    </div>
-                    <p class="text-muted small mb-2">by {{ $review->book->author->name }}</p>                    <p class="card-text">
-                        {{ Str::limit($review->content ?? 'No content provided.', 100) }}
-                    </p>
-                    <div class="mt-auto">
-                        <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>{{ $review->created_at->diffForHumans() }}
-                        </small>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent">
-                    <div class="btn-group w-100" role="group">
-                        <a href="{{ route('reviews.show', $review) }}" class="btn btn-sm btn-outline-info">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <a href="{{ route('reviews.edit', $review) }}" class="btn btn-sm btn-outline-warning">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="{{ route('reviews.destroy', $review) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this review?')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
+    @if($reviews->count())
+    <div class="card bg-light border border-dark-subtle shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Rating</th>
+                            <th>Excerpt</th>
+                            <th>Date</th>
+                            <th class="text-end" style="width: 160px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($reviews as $review)
+                        <tr class="align-middle">
+                            <td><strong>{{ $review->book->title }}</strong></td>
+                            <td class="text-muted">{{ $review->book->author->name }}</td>
+                            <td>
+                                <div class="text-warning">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $review->rating)
+                                            <i class="fas fa-star"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                            </td>
+                            <td>{{ Str::limit($review->content ?? 'No content provided.', 60) }}</td>
+                            <td>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>{{ $review->created_at->diffForHumans() }}
+                                </small>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <a href="{{ route('reviews.show', $review) }}" class="btn btn-sm btn-outline-info" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('reviews.edit', $review) }}" class="btn btn-sm btn-outline-dark" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('reviews.destroy', $review) }}" method="POST">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this review?')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-        @empty
-        <div class="col-12">
-            <div class="text-center py-5">
-                <i class="fas fa-star fa-3x text-muted mb-3"></i>
-                <h4 class="text-muted">No reviews found</h4>
-                <p class="text-muted">Start by <a href="{{ route('reviews.create') }}">adding your first review</a></p>
-            </div>
-        </div>
-        @endforelse
     </div>
+    @else
+    <div class="text-center py-5">
+        <i class="fas fa-star fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No reviews found</h4>
+        <p class="text-muted">Start by <a href="{{ route('reviews.create') }}">adding your first review</a></p>
+    </div>
+    @endif
 </div>
 @endsection

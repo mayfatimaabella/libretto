@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2></i>Genres</h2>
-        <a href="{{ route('genres.create') }}" class="btn btn-warning">
+        <a href="{{ route('genres.create') }}" class="btn btn-info">
             <i class="fas fa-plus me-2"></i>Add New Genre
         </a>
     </div>
@@ -16,48 +16,61 @@
         </div>
     @endif
 
-    <div class="row">
-        @forelse($genres as $genre)
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="fas fa-tag me-2 text-warning"></i>{{ $genre->name }}
-                    </h5>
-                    <p class="card-text text-muted">
-                        {{ $genre->description ?? 'No description available.' }}
-                    </p>
-                    <div class="mb-3">
-                        <span class="badge bg-warning text-dark">{{ $genre->books_count }} books</span>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent">
-                    <div class="btn-group w-100" role="group">
-                        <a href="{{ route('genres.show', $genre) }}" class="btn btn-sm btn-outline-info">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <a href="{{ route('genres.edit', $genre) }}" class="btn btn-sm btn-outline-warning">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('genres.destroy', $genre) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this genre?')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
+    @if($genres->count())
+        <div class="card bg-light border border-dark-subtle shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Genre Name</th>
+                                <th>Description</th>
+                                <th>Books</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($genres as $index => $genre)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <i class="fas fa-tag text-info me-1"></i>
+                                    {{ $genre->name }}
+                                </td>
+                                <td class="text-muted">
+                                    {{ $genre->description ?? 'No description available.' }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark">{{ $genre->books_count }} books</span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ route('genres.show', $genre) }}" class="btn btn-sm btn-outline-info me-1" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('genres.edit', $genre) }}" class="btn btn-sm btn-outline-dark me-1" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('genres.destroy', $genre) }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this genre?')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        @empty
-        <div class="col-12">
-            <div class="text-center py-5">
-                <i class="fas fa-tags fa-3x text-muted mb-3"></i>
-                <h4 class="text-muted">No genres found</h4>
-                <p class="text-muted">Start by <a href="{{ route('genres.create') }}">adding your first genre</a></p>
-            </div>
+    @else
+        <div class="text-center py-5">
+            <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No genres found</h4>
+            <p class="text-muted">Start by <a href="{{ route('genres.create') }}">adding your first genre</a></p>
         </div>
-        @endforelse
-    </div>
+    @endif
 </div>
 @endsection
