@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2></i>Authors</h2>
-        <a href="{{ route('authors.create') }}" class="btn btn-info">
+        <a href="{{ route('authors.create') }}" class="btn bg-primary bg-opacity-25 text-dark ">
             <i class="fas fa-plus me-2"></i>Add New Author
         </a>
     </div>
@@ -33,7 +33,7 @@
                         <tr>
                             <td><strong>{{ $author->name }}</strong></td>
                             <td>
-                                <span class="badge bg-info text-dark">{{ $author->books_count }} books</span>
+                                <span class="badge bg-primary bg-opacity-25 text-dark">{{ $author->books_count }} books</span>
                             </td>
                             <td>
                                 {{ Str::limit($author->bio ?? 'No bio available', 50) }}

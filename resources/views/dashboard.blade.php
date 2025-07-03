@@ -15,8 +15,8 @@
     <!-- Stats Section -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="card text-center bg-info bg-opacity-10 border border-info-subtle">
-                <div class="card-header bg-info bg-opacity-25 text-dark">
+            <div class="card text-center bg-primary bg-opacity-10 border border-info-subtle">
+                <div class="card-header bg-primary bg-opacity-25 text-dark">
                     <h5>Authors</h5>
                 </div>
                 <div class="card-body">
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center bg-info bg-opacity-10 border border-info-subtle">
-                <div class="card-header bg-info bg-opacity-25 text-dark">
+            <div class="card text-center bg-primary bg-opacity-10 border border-info-subtle">
+                <div class="card-header bg-primary bg-opacity-25 text-dark">
                     <h5>Books</h5>
                 </div>
                 <div class="card-body">
@@ -37,8 +37,8 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center bg-info bg-opacity-10 border border-info-subtle">
-                <div class="card-header bg-info bg-opacity-25 text-dark">
+            <div class="card text-center bg-primary bg-opacity-10 border border-info-subtle">
+                <div class="card-header bg-primary bg-opacity-25 text-dark">
                     <h5>Genres</h5>
                 </div>
                 <div class="card-body">
@@ -48,8 +48,8 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-center bg-info bg-opacity-10 border border-info-subtle">
-                <div class="card-header bg-info bg-opacity-25 text-dark">
+            <div class="card text-center bg-primary bg-opacity-10 border border-info-subtle">
+                <div class="card-header bg-primary bg-opacity-25 text-dark">
                     <h5>Reviews</h5>
                 </div>
                 <div class="card-body">
