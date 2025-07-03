@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2></i>Books</h2>
-        <a href="{{ route('books.create') }}" class="btn btn-info">
+        <a href="{{ route('books.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Book
         </a>
     </div>
@@ -36,7 +36,7 @@
                             <td>
                                 @if($book->genres->count())
                                     @foreach($book->genres as $genre)
-                                        <span class="badge bg-info text-dark">{{ $genre->name }}</span>
+                                        <span class="badge bg-primary bg-opacity-25 text-dark">{{ $genre->name }}</span>
                                     @endforeach
                                 @else
                                     <span class="text-muted">No genres</span>

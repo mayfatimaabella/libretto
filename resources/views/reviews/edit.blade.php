@@ -51,7 +51,7 @@
                             <a href="{{ route('reviews.index') }}" class="btn btn-secondary me-md-2">
                                 <i class="fas fa-times me-2"></i>Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn bg-primary bg-opacity-25 text-dark">
                                 <i class="fas fa-save me-2"></i>Update Review
                             </button>
                         </div>

@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-tag me-2 text-warning"></i>{{ $genre->name }}</h5>
+                    <h5 class="mb-0"><i class="fas fa-tag me-2 text-info"></i>{{ $genre->name }}</h5>
                 </div>
                 <div class="card-body">
                     @if($genre->description)
@@ -16,7 +16,7 @@
                     @endif
                     
                     <div class="d-flex gap-2 mt-3">
-                        <a href="{{ route('genres.edit', $genre) }}" class="btn btn-warning">
+                        <a href="{{ route('genres.edit', $genre) }}" class="btn bg-primary bg-opacity-25 text-dark">
                             <i class="fas fa-edit me-2"></i>Edit Genre
                         </a>
                         <a href="{{ route('genres.index') }}" class="btn btn-secondary">

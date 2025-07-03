@@ -24,7 +24,6 @@
                         <tr>
                             <th>Name</th>
                             <th>Books Count</th>
-                            <th>Bio</th>
                             <th class="text-end" width="200">Actions</th>
                         </tr>
                     </thead>
@@ -34,9 +33,6 @@
                             <td><strong>{{ $author->name }}</strong></td>
                             <td>
                                 <span class="badge bg-primary bg-opacity-25 text-dark">{{ $author->books_count }} books</span>
-                            </td>
-                            <td>
-                                {{ Str::limit($author->bio ?? 'No bio available', 50) }}
                             </td>
                             <td class="text-end">
                                 <a href="{{ route('authors.show', $author) }}" class="btn btn-sm btn-outline-info me-1" title="View">

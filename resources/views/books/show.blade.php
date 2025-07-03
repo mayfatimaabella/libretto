@@ -23,7 +23,7 @@
                     @endif
                     
                     <div class="d-flex gap-2 mt-3">
-                        <a href="{{ route('books.edit', $book) }}" class="btn btn-info">
+                        <a href="{{ route('books.edit', $book) }}" class="btn bg-primary bg-opacity-25 text-dark">
                             <i class="fas fa-edit me-2"></i>Edit Book
                         </a>
                         <a href="{{ route('books.index') }}" class="btn btn-secondary">

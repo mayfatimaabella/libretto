@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2></i>Genres</h2>
-        <a href="{{ route('genres.create') }}" class="btn btn-info">
+        <a href="{{ route('genres.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Genre
         </a>
     </div>
@@ -25,7 +25,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>Genre Name</th>
-                                <th>Description</th>
                                 <th>Books</th>
                                 <th class="text-end">Actions</th>
                             </tr>
@@ -38,11 +37,8 @@
                                     <i class="fas fa-tag text-info me-1"></i>
                                     {{ $genre->name }}
                                 </td>
-                                <td class="text-muted">
-                                    {{ $genre->description ?? 'No description available.' }}
-                                </td>
                                 <td>
-                                    <span class="badge bg-info text-dark">{{ $genre->books_count }} books</span>
+                                    <span class="badge bg-primary bg-opacity-25 text-dark">{{ $genre->books_count }} books</span>
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('genres.show', $genre) }}" class="btn btn-sm btn-outline-info me-1" title="View">

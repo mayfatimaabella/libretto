@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="fas fa-star text-info me-2"></i>Reviews</h2>
-        <a href="{{ route('reviews.create') }}" class="btn btn-info">
+        <a href="{{ route('reviews.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Review
         </a>
     </div>

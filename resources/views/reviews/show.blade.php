@@ -50,7 +50,7 @@
                     @endif
                     
                     <div class="d-flex gap-2 mt-4">
-                        <a href="{{ route('reviews.edit', $review) }}" class="btn btn-warning">
+                        <a href="{{ route('reviews.edit', $review) }}" class="btn bg-primary bg-opacity-25 text-dark">
                             <i class="fas fa-edit me-2"></i>Edit Review
                         </a>
                         <a href="{{ route('reviews.index') }}" class="btn btn-secondary">

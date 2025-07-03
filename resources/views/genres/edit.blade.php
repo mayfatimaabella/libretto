@@ -33,7 +33,7 @@
                             <a href="{{ route('genres.index') }}" class="btn btn-secondary me-md-2">
                                 <i class="fas fa-times me-2"></i>Cancel
                             </a>
-                            <button type="submit" class="btn btn-warning">
+                            <button type="submit" class="btn bg-primary bg-opacity-25 text-dark">
                                 <i class="fas fa-save me-2"></i>Update Genre
                             </button>
                         </div>
