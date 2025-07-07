@@ -60,20 +60,13 @@
         </div>
     </div>
 
-    <!-- Management Section Header -->
-    <div class="row">
-        <div class="col-12">
-            <h3 class="mb-3">Management Section</h3>
-        </div>
-    </div>
-
     <!-- Management Cards -->
     <div class="row">
         <!-- Authors -->
         <div class="col-md-6 mb-4">
             <div class="card bg-light border border-dark-subtle">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Authors Management</h5>
+                    <h5 class="mb-0">Authors</h5>
                 </div>
                 <div class="card-body">
                     <div class="btn-group w-100" role="group">
@@ -88,7 +81,7 @@
         <div class="col-md-6 mb-4">
             <div class="card bg-light border border-dark-subtle">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Books Management</h5>
+                    <h5 class="mb-0">Books</h5>
                 </div>
                 <div class="card-body">
                     <div class="btn-group w-100" role="group">
@@ -103,7 +96,7 @@
         <div class="col-md-6 mb-4">
             <div class="card bg-light border border-dark-subtle">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Genres Management</h5>
+                    <h5 class="mb-0">Genres</h5>
                 </div>
                 <div class="card-body">
                     <div class="btn-group w-100" role="group">
@@ -118,7 +111,7 @@
         <div class="col-md-6 mb-4">
             <div class="card bg-light border border-dark-subtle">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Reviews Management</h5>
+                    <h5 class="mb-0">Reviews</h5>
                 </div>
                 <div class="card-body">
                     <div class="btn-group w-100" role="group">

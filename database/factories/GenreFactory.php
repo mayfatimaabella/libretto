@@ -18,8 +18,11 @@ class GenreFactory extends Factory
      */
     public function definition(): array
     {
+        $genres = ['Fiction', 'Non-Fiction', 'Fantasy', 'Science Fiction', 'Mystery', 'Romance', 'Thriller', 'Biography', 'History', 'Self-Help'];
+        
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->unique()->randomElement($genres),
+            'description' => $this->faker->sentence,
         ];
     }
 }

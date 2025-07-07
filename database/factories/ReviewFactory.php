@@ -21,7 +21,8 @@ class ReviewFactory extends Factory
     {
         return [
             'book_id' => Book::factory(),
-            'content' => $this->faker->paragraph,
+            'user_id' => \App\Models\User::factory(),
+            'comment' => $this->faker->paragraph,
             'rating' => $this->faker->numberBetween(1, 5),           
         ];
     }

@@ -17,20 +17,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create test users first (needed for API authentication)
+        $users = \App\Models\User::factory(10)->create();
+        
+        // Create a specific test user for API testing
+        $testUser = \App\Models\User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
 
-        \App\Models\Author::factory(10)->create()->each(function ($author) {
+        // Create authors with books, genres, and reviews
+        \App\Models\Author::factory(10)->create()->each(function ($author) use ($users) {
             $books = \App\Models\Book::factory(3)->create(['author_id' => $author->id]);
-            $books->each(function ($book) {
+            $books->each(function ($book) use ($users) {
                 $genres = \App\Models\Genre::factory(2)->create();
                 $book->genres()->attach($genres);
-                \App\Models\Review::factory(5)->create(['book_id' => $book->id]);
+                
+                // Create reviews by different users
+                $users->random(3)->each(function ($user) use ($book) {
+                    \App\Models\Review::factory()->create([
+                        'book_id' => $book->id,
+                        'user_id' => $user->id,
+                    ]);
+                });
             });
         });
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
