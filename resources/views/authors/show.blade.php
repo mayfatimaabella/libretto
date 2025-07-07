@@ -9,11 +9,6 @@
                     <h5 class="mb-0"><i class="fas fa-user me-2"></i>{{ $author->name }}</h5>
                 </div>
                 <div class="card-body">
-                    @if($author->bio)
-                        <p class="lead">{{ $author->bio }}</p>
-                    @else
-                        <p class="text-muted">No biography available.</p>
-                    @endif
                     
                     <div class="d-flex gap-2 mt-3">
                         <a href="{{ route('authors.edit', $author) }}" class="btn bg-primary bg-opacity-25 text-dark">

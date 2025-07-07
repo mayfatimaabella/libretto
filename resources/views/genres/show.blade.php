@@ -9,11 +9,6 @@
                     <h5 class="mb-0"><i class="fas fa-tag me-2 text-info"></i>{{ $genre->name }}</h5>
                 </div>
                 <div class="card-body">
-                    @if($genre->description)
-                        <p class="lead">{{ $genre->description }}</p>
-                    @else
-                        <p class="text-muted">No description available for this genre.</p>
-                    @endif
                     
                     <div class="d-flex gap-2 mt-3">
                         <a href="{{ route('genres.edit', $genre) }}" class="btn bg-primary bg-opacity-25 text-dark">

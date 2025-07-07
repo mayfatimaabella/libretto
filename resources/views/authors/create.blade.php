@@ -20,15 +20,6 @@
                             @enderror
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="bio" class="form-label">Biography</label>
-                            <textarea name="bio" id="bio" class="form-control @error('bio') is-invalid @enderror" 
-                                      rows="4" placeholder="Enter author's biography...">{{ old('bio') }}</textarea>
-                            @error('bio')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('authors.index') }}" class="btn btn-secondary me-md-2">
                                 <i class="fas fa-times me-2"></i>Cancel
