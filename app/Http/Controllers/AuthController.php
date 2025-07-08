@@ -23,22 +23,30 @@ class AuthController extends Controller
 
         $user = Auth::user();
         
-        // Check if user has an existing valid token (created within last 24 hours)
+        // Check if user has an existing valid token (not expired)
         $existingToken = $user->tokens()
             ->where('created_at', '>', Carbon::now()->subDay())
             ->first();
 
         if ($existingToken) {
-            // Return existing token info (note: plainTextToken is only available on creation)
+            // For existing tokens, we can't return the plainTextToken (it's hashed)
+            // So we need to delete and create a new one
+            $user->tokens()->delete();
+            
+            // Create new token
+            $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
+            
             return response()->json([
-                'message' => 'Using existing valid token',
-                'token_name' => $existingToken->name,
-                'expires_at' => $existingToken->created_at->addDay(),
-                'user' => $user
+                'message' => 'Previous token expired, new token generated',
+                'token' => $token->plainTextToken,
+                'expires_at' => Carbon::now()->addDay(),
+                'user' => $user,
+                'token_created' => Carbon::now(),
+                'note' => 'Use this new token for API calls'
             ]);
         }
 
-        // Delete all old tokens and create new one
+        // Delete all expired tokens and create new one only if no valid token exists
         $user->tokens()->delete();
         
         // Create new token with 24-hour expiration
@@ -48,16 +56,35 @@ class AuthController extends Controller
             'token' => $token->plainTextToken,
             'expires_at' => Carbon::now()->addDay(),
             'user' => $user,
-            'message' => 'Login successful'
+            'message' => 'New token generated - save this token!',
+            'token_created' => Carbon::now(),
+            'important' => 'This token will not be shown again. Save it now!'
         ]);
     }
 
     public function logout(Request $request)
     {
-        // Delete all tokens for the user
-        $request->user()->tokens()->delete();
-        
-        return response()->json(['message' => 'Logged out successfully']);
+        try {
+            // Simple logout without complex debugging
+            $user = $request->user();
+            
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not authenticated. Make sure you have Authorization Bearer token set.'
+                ], 401);
+            }
+            
+            // Delete all tokens for the user
+            $user->tokens()->delete();
+            
+            return response()->json(['message' => 'Logged out successfully']);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Logout failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function user(Request $request)
@@ -91,5 +118,37 @@ class AuthController extends Controller
             'user' => $user,
             'message' => 'Registration successful'
         ], 201);
+    }
+    
+    public function deleteAccount(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+            
+            // Delete all user's tokens first
+            $user->tokens()->delete();
+            
+            // Delete all user's reviews
+            $user->reviews()->delete();
+            
+            // Delete the user account
+            $user->delete();
+            
+            return response()->json([
+                'message' => 'Account deleted successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Account deletion failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

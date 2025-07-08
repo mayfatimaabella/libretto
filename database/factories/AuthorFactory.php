@@ -21,9 +21,6 @@ class AuthorFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'biography' => $this->faker->paragraph,
-            'birth_date' => $this->faker->date('Y-m-d', '2000-01-01'),
-            'death_date' => $this->faker->optional(0.3)->date('Y-m-d'),
         ];
     }
 }

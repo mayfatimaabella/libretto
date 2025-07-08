@@ -9,17 +9,6 @@ use App\Http\Controllers\Api\ReviewApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Test route
-Route::get('/test', function () {
-    return response()->json(['message' => 'API is working!']);
-});
-
-// Debug AuthController
-Route::get('/debug-auth', function () {
-    $controller = new App\Http\Controllers\AuthController();
-    return response()->json(['message' => 'AuthController loaded successfully']);
-});
-
 // Authentication routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -29,7 +18,7 @@ Route::middleware(['auth:sanctum', 'check.token.expiration'])->group(function ()
     // Auth routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-    
+
     // CRUD routes for all resources
     Route::apiResource('authors', AuthorApiController::class);
     Route::apiResource('books', BookApiController::class);

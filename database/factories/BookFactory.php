@@ -20,11 +20,8 @@ class BookFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(3),
+            'title' => $this->faker->sentence,
             'author_id' => Author::factory(),
-            'isbn' => $this->faker->isbn13,
-            'publication_date' => $this->faker->date('Y-m-d'),
-            'description' => $this->faker->paragraph,
         ];
     }
 }
