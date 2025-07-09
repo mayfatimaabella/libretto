@@ -23,38 +23,29 @@ class AuthController extends Controller
 
         $user = Auth::user();
         
-        // Check if user has an existing valid token (not expired)
         $existingToken = $user->tokens()
-            ->where('created_at', '>', Carbon::now()->subDay())
+            ->where('created_at', '>', Carbon::now()->subMinute())
             ->first();
 
         if ($existingToken) {
-            // For existing tokens, we can't return the plainTextToken (it's hashed)
-            // So we need to delete and create a new one
-            $user->tokens()->delete();
-            
-            // Create new token
-            $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
-            
             return response()->json([
-                'message' => 'Previous token expired, new token generated',
-                'token' => $token->plainTextToken,
-                'expires_at' => Carbon::now()->addDay(),
+                'message' => 'You already have a valid token. Please use your existing token.',
+                'token_exists' => true,
+                'token_created' => $existingToken->created_at,
+                'token_expires' => $existingToken->created_at->addMinute(),
                 'user' => $user,
-                'token_created' => Carbon::now(),
-                'note' => 'Use this new token for API calls'
+                'hours_until_expiry' => Carbon::now()->diffInHours($existingToken->created_at->addMinute()),
+                'note' => 'Your existing token is still valid. No new token generated.'
             ]);
         }
 
-        // Delete all expired tokens and create new one only if no valid token exists
-        $user->tokens()->delete();
+        $user->tokens()->where('created_at', '<=', Carbon::now()->subMinute())->delete();
         
-        // Create new token with 24-hour expiration
         $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
 
         return response()->json([
             'token' => $token->plainTextToken,
-            'expires_at' => Carbon::now()->addDay(),
+            'expires_at' => Carbon::now()->addMinute(),
             'user' => $user,
             'message' => 'New token generated - save this token!',
             'token_created' => Carbon::now(),
@@ -65,7 +56,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            // Simple logout without complex debugging
             $user = $request->user();
             
             if (!$user) {
@@ -74,10 +64,14 @@ class AuthController extends Controller
                 ], 401);
             }
             
-            // Delete all tokens for the user
+            $deletedTokens = $user->tokens()->count();
             $user->tokens()->delete();
             
-            return response()->json(['message' => 'Logged out successfully']);
+            return response()->json([
+                'message' => 'Logged out successfully',
+                'user_id' => $user->id,
+                'deleted_tokens' => $deletedTokens
+            ]);
             
         } catch (\Exception $e) {
             return response()->json([
@@ -89,10 +83,14 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
+        $user = $request->user();
+        $token = $user->currentAccessToken();
+        
         return response()->json([
-            'user' => $request->user(),
-            'token_created' => $request->user()->currentAccessToken()->created_at,
-            'token_expires' => $request->user()->currentAccessToken()->created_at->addDay()
+            'user' => $user,
+            'token_created' => $token->created_at,
+            'token_expires' => $token->created_at->addMinute(),
+            'token_valid' => $token->created_at->addMinute()->isFuture()
         ]);
     }
 
@@ -110,11 +108,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
+        $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addMinute());
 
         return response()->json([
             'token' => $token->plainTextToken,
-            'expires_at' => Carbon::now()->addDay(),
+            'expires_at' => Carbon::now()->addMinute(),
             'user' => $user,
             'message' => 'Registration successful'
         ], 201);
@@ -147,6 +145,42 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Account deletion failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    public function deleteSpecificToken(Request $request, $tokenId)
+    {
+        try {
+            $user = $request->user();
+            
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+            
+            // Find the specific token belonging to the user
+            $token = $user->tokens()->where('id', $tokenId)->first();
+            
+            if (!$token) {
+                return response()->json([
+                    'message' => 'Token not found or does not belong to you'
+                ], 404);
+            }
+            
+            // Delete the specific token
+            $token->delete();
+            
+            return response()->json([
+                'message' => 'Token deleted successfully',
+                'deleted_token_id' => $tokenId
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Token deletion failed',
                 'error' => $e->getMessage()
             ], 500);
         }

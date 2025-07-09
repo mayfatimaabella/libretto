@@ -15,9 +15,28 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Protected routes - require authentication
 Route::middleware(['auth:sanctum', 'check.token.expiration'])->group(function () {
+    // Debug/Test route for authentication
+    Route::get('/test-auth', function (Request $request) {
+        return response()->json([
+            'message' => 'Authenticated successfully',
+            'user' => $request->user(),
+            'token' => $request->user()->currentAccessToken(),
+            'debug' => [
+                'token_id' => $request->user()->currentAccessToken()->id,
+                'token_name' => $request->user()->currentAccessToken()->name,
+                'token_created' => $request->user()->currentAccessToken()->created_at,
+                'token_expires' => $request->user()->currentAccessToken()->created_at->addDay(),
+                'current_time' => \Carbon\Carbon::now(),
+                'is_expired' => $request->user()->currentAccessToken()->created_at->addDay()->isPast()
+            ]
+        ]);
+    });
+    
     // Auth routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::delete('/user/delete', [AuthController::class, 'deleteAccount']);
+    Route::delete('/tokens/{tokenId}', [AuthController::class, 'deleteSpecificToken']);
 
     // CRUD routes for all resources
     Route::apiResource('authors', AuthorApiController::class);
