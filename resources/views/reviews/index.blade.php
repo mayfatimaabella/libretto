@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2></i>Reviews</h2>
+        <h2>Reviews</h2>
         <a href="{{ route('reviews.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Review
         </a>
@@ -16,6 +16,17 @@
         </div>
     @endif
 
+    {{-- Results Info --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-muted mb-0">
+            Showing {{ $reviews->firstItem() ?? 0 }} to {{ $reviews->lastItem() ?? 0 }} 
+            of {{ $reviews->total() }} results
+        </p>
+        <div class="text-muted">
+            Page {{ $reviews->currentPage() }} of {{ $reviews->lastPage() }}
+        </div>
+    </div>
+
     @if($reviews->count())
     <div class="card bg-light border border-dark-subtle shadow-sm">
         <div class="card-body">
@@ -26,7 +37,7 @@
                             <th>Book</th>
                             <th>Author</th>
                             <th>Rating</th>
-                            <th>Excerpt</th>
+                            <th>Content</th>
                             <th>Date</th>
                             <th class="text-end" style="width: 160px;">Actions</th>
                         </tr>
@@ -75,6 +86,11 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    {{-- Pagination Links --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $reviews->links() }}
     </div>
     @else
     <div class="text-center py-5">

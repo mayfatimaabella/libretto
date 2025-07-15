@@ -13,7 +13,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $reviews = Review::with('book.author')->latest()->get();
+        $reviews = Review::with(['book.author'])->latest()->paginate(10);
         return view('reviews.index', compact('reviews'));
     }
 

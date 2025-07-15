@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2></i>Authors</h2>
+        <h2>Authors</h2>
         <a href="{{ route('authors.create') }}" class="btn bg-primary bg-opacity-25 text-dark ">
             <i class="fas fa-plus me-2"></i>Add New Author
         </a>
@@ -15,6 +15,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
+    {{-- Results Info --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-muted mb-0">
+            Showing {{ $authors->firstItem() ?? 0 }} to {{ $authors->lastItem() ?? 0 }} 
+            of {{ $authors->total() }} results
+        </p>
+        <div class="text-muted">
+            Page {{ $authors->currentPage() }} of {{ $authors->lastPage() }}
+        </div>
+    </div>
 
     <div class="card bg-light border border-dark-subtle shadow-sm">
         <div class="card-body">
@@ -51,7 +62,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">
+                            <td colspan="3" class="text-center text-muted py-4">
                                 <i class="fas fa-users fa-3x mb-3 d-block text-info"></i>
                                 No authors found. <a href="{{ route('authors.create') }}">Add the first author</a>
                             </td>
@@ -61,6 +72,11 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    {{-- Pagination Links --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $authors->links() }}
     </div>
 </div>
 @endsection

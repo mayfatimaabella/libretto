@@ -13,7 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'check.token.expiration' => \App\Http\Middleware\CheckTokenExpiration::class,
+        ]);
+        
+        // Configure API authentication to return JSON responses
+        $middleware->redirectGuestsTo(fn () => abort(401, 'Unauthenticated'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

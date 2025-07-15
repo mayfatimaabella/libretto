@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2></i>Genres</h2>
+        <h2>Genres</h2>
         <a href="{{ route('genres.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Genre
         </a>
@@ -15,6 +15,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
+    {{-- Results Info --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-muted mb-0">
+            Showing {{ $genres->firstItem() ?? 0 }} to {{ $genres->lastItem() ?? 0 }} 
+            of {{ $genres->total() }} results
+        </p>
+        <div class="text-muted">
+            Page {{ $genres->currentPage() }} of {{ $genres->lastPage() }}
+        </div>
+    </div>
 
     @if($genres->count())
         <div class="card bg-light border border-dark-subtle shadow-sm">
@@ -32,7 +43,7 @@
                         <tbody>
                             @foreach($genres as $index => $genre)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ ($genres->currentPage() - 1) * $genres->perPage() + $index + 1 }}</td>
                                 <td>
                                     <i class="fas fa-tag text-info me-1"></i>
                                     {{ $genre->name }}
@@ -60,6 +71,11 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        {{-- Pagination Links --}}
+        <div class="d-flex justify-content-center mt-4">
+            {{ $genres->links() }}
         </div>
     @else
         <div class="text-center py-5">

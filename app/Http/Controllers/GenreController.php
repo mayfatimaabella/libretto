@@ -12,7 +12,7 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genres = Genre::withCount('books')->get();
+        $genres = Genre::withCount('books')->paginate(15);
         return view('genres.index', compact('genres'));
     }
 

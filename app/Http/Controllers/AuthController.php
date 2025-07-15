@@ -23,29 +23,35 @@ class AuthController extends Controller
 
         $user = Auth::user();
         
+        // Check for existing valid token (not expired)
         $existingToken = $user->tokens()
-            ->where('created_at', '>', Carbon::now()->subMinute())
+            ->where('created_at', '>', Carbon::now()->subDay())
             ->first();
 
         if ($existingToken) {
+            // Token exists and is not expired
+            $expiresAt = $existingToken->created_at->addDay();
+            
             return response()->json([
                 'message' => 'You already have a valid token. Please use your existing token.',
                 'token_exists' => true,
                 'token_created' => $existingToken->created_at,
-                'token_expires' => $existingToken->created_at->addMinute(),
+                'token_expires' => $expiresAt,
                 'user' => $user,
-                'hours_until_expiry' => Carbon::now()->diffInHours($existingToken->created_at->addMinute()),
+                'hours_until_expiry' => Carbon::now()->diffInHours($expiresAt),
                 'note' => 'Your existing token is still valid. No new token generated.'
             ]);
         }
 
-        $user->tokens()->where('created_at', '<=', Carbon::now()->subMinute())->delete();
+        // Delete all expired tokens (older than 1 day)
+        $user->tokens()->where('created_at', '<=', Carbon::now()->subDay())->delete();
         
+        // Create new token with 1-day expiry
         $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
 
         return response()->json([
             'token' => $token->plainTextToken,
-            'expires_at' => Carbon::now()->addMinute(),
+            'expires_at' => Carbon::now()->addDay(),
             'user' => $user,
             'message' => 'New token generated - save this token!',
             'token_created' => Carbon::now(),
@@ -89,8 +95,8 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token_created' => $token->created_at,
-            'token_expires' => $token->created_at->addMinute(),
-            'token_valid' => $token->created_at->addMinute()->isFuture()
+            'token_expires' => $token->created_at->addDay(),
+            'token_valid' => $token->created_at->addDay()->isFuture()
         ]);
     }
 
@@ -108,11 +114,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addMinute());
+        $token = $user->createToken('libretto-token', ['*'], Carbon::now()->addDay());
 
         return response()->json([
             'token' => $token->plainTextToken,
-            'expires_at' => Carbon::now()->addMinute(),
+            'expires_at' => Carbon::now()->addDay(),
             'user' => $user,
             'message' => 'Registration successful'
         ], 201);

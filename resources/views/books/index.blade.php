@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2></i>Books</h2>
+        <h2>Books</h2>
         <a href="{{ route('books.create') }}" class="btn bg-primary bg-opacity-25 text-dark">
             <i class="fas fa-plus me-2"></i>Add New Book
         </a>
@@ -15,6 +15,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
+    {{-- Results Info --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-muted mb-0">
+            Showing {{ $books->firstItem() ?? 0 }} to {{ $books->lastItem() ?? 0 }} 
+            of {{ $books->total() }} results
+        </p>
+        <div class="text-muted">
+            Page {{ $books->currentPage() }} of {{ $books->lastPage() }}
+        </div>
+    </div>
 
     <div class="card bg-light border border-dark-subtle shadow-sm">
         <div class="card-body">
@@ -69,6 +80,11 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    {{-- Pagination Links --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $books->links() }}
     </div>
 </div>
 @endsection
